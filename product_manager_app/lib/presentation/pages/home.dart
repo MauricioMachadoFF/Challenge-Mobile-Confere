@@ -53,6 +53,24 @@ class _HomeState extends State<Home> {
                   child: ListTile(
                     title: Text(res.name),
                     subtitle: Text(res.price),
+                    trailing: Ink(
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        color: Colors.orange,
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => EditProduct()),
+                          // );
+                        },
+                      ),
+                    ),
                   ),
                 );
               },
