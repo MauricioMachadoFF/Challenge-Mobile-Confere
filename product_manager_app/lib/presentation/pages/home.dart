@@ -4,6 +4,7 @@ import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/presentation/pages/single_product.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:product_manager_app/presentation/widgets/product_list.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -30,54 +31,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text('Product Manager'),
       ),
-      body: ValueListenableBuilder(
-        valueListenable: Hive.box<Product>(HiveBoxes.productList).listenable(),
-        builder: (context, Box<Product> box, widget) {
-          if (box.values.isEmpty) {
-            return Center(
-              child: Text('No products registered'),
-            );
-          } else {
-            return ListView.builder(
-              itemCount: box.values.length,
-              itemBuilder: (context, index) {
-                Product res = box.getAt(index);
-                return Dismissible(
-                  background: Container(
-                    color: Colors.red[600],
-                  ),
-                  key: UniqueKey(),
-                  onDismissed: (direction) {
-                    res.delete();
-                  },
-                  child: ListTile(
-                    title: Text(res.name),
-                    subtitle: Text(res.price),
-                    trailing: Ink(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder(),
-                        color: Colors.orange,
-                      ),
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => EditProduct()),
-                          // );
-                        },
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
+      body: ProductList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

@@ -5,7 +5,8 @@ import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/boxes.dart';
 
 class ProductForm extends StatefulWidget {
-  const ProductForm({Key key}) : super(key: key);
+  final Product product;
+  const ProductForm({Key key, this.product}) : super(key: key);
 
   @override
   _ProductFormState createState() => _ProductFormState();
@@ -13,9 +14,19 @@ class ProductForm extends StatefulWidget {
 
 class _ProductFormState extends State<ProductForm> {
   final formKey = GlobalKey<FormState>();
-  String name;
-  String price;
-  String discountPrice;
+
+  TextEditingController nameController;
+  TextEditingController priceController;
+  TextEditingController discountPriceController;
+
+  @override
+  void initState() {
+    nameController = TextEditingController(text: widget.product?.name);
+    priceController = TextEditingController(text: widget.product?.price);
+    discountPriceController =
+        TextEditingController(text: widget.product?.discountPrice);
+    super.initState();
+  }
 
   validated() {
     if (formKey.currentState != null && formKey.currentState.validate()) {
@@ -27,14 +38,21 @@ class _ProductFormState extends State<ProductForm> {
   }
 
   void _onFormSubmit() {
-    Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
-    productBox.add(Product(
-      name: name,
-      price: price,
-      discountPrice: discountPrice,
-    ));
+    if (widget.product != null) {
+      widget.product.name = nameController.text;
+      widget.product.price = priceController.text;
+      widget.product.discountPrice = discountPriceController.text;
+
+      widget.product.save();
+    } else {
+      Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
+      productBox.add(Product(
+        name: nameController.text,
+        price: priceController.text,
+        discountPrice: discountPriceController.text,
+      ));
+    }
     Navigator.of(context).pop();
-    print(productBox);
   }
 
   @override
@@ -46,6 +64,7 @@ class _ProductFormState extends State<ProductForm> {
         child: Column(
           children: [
             TextFormField(
+              controller: nameController,
               decoration: InputDecoration(
                 labelText: "Name",
                 border: OutlineInputBorder(),
@@ -53,17 +72,16 @@ class _ProductFormState extends State<ProductForm> {
               validator: (value) {
                 if (value.isEmpty) {
                   return "Enter a valid name";
-                } else {
-                  name = value;
-                  return null;
                 }
+                return null;
               },
             ),
             SizedBox(
               height: 20.0,
             ),
             TextFormField(
-              decoration: InputDecoration(
+              controller: priceController,
+              decoration: const InputDecoration(
                 labelText: "Price",
                 border: OutlineInputBorder(),
               ),
@@ -74,16 +92,15 @@ class _ProductFormState extends State<ProductForm> {
               validator: (value) {
                 if (value.isEmpty) {
                   return "Enter a valid value";
-                } else {
-                  price = value;
-                  return null;
                 }
+                return null;
               },
             ),
             SizedBox(
               height: 20.0,
             ),
             TextFormField(
+              controller: discountPriceController,
               decoration: InputDecoration(
                 labelText: "Discounted Price",
                 border: OutlineInputBorder(),
@@ -92,10 +109,8 @@ class _ProductFormState extends State<ProductForm> {
               validator: (value) {
                 if (value.isEmpty) {
                   return "Enter a valid value";
-                } else {
-                  discountPrice = value;
-                  return null;
                 }
+                return null;
               },
             ),
             SizedBox(
@@ -105,7 +120,7 @@ class _ProductFormState extends State<ProductForm> {
               onPressed: () {
                 validated();
               },
-              style: TextButton.styleFrom(backgroundColor: Colors.blue),
+              style: TextButton.styleFrom(backgroundColor: Colors.deepPurple),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
