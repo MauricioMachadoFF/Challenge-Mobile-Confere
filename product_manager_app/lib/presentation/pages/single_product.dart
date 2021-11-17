@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:product_manager_app/boxes.dart';
+import 'package:product_manager_app/data/models/product.dart';
+import 'package:hive/hive.dart';
 
 class SingleProduct extends StatefulWidget {
   const SingleProduct({Key key}) : super(key: key);
@@ -11,7 +14,20 @@ class SingleProduct extends StatefulWidget {
 
 class _SingleProductState extends State<SingleProduct> {
   final formKey = GlobalKey<FormState>();
-  final price = GlobalKey<FormFieldState>();
+  // final price = GlobalKey<FormFieldState>();
+
+  validated() {
+    if (formKey.currentState != null && formKey.currentState.validate()) {
+      _onFormSubmit();
+      print('Validated');
+    } else {
+      print('Form not validated');
+    }
+  }
+
+  String name;
+  String price;
+  String discountPrice;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +40,9 @@ class _SingleProductState extends State<SingleProduct> {
       ],
       child: Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text('Add Product'),
+        ),
         body: Form(
           key: formKey,
           child: Padding(
@@ -39,6 +58,7 @@ class _SingleProductState extends State<SingleProduct> {
                     if (value.isEmpty) {
                       return "Enter a valid name";
                     } else {
+                      name = value;
                       return null;
                     }
                   },
@@ -60,6 +80,7 @@ class _SingleProductState extends State<SingleProduct> {
                     if (value.isEmpty) {
                       return "Enter a valid value";
                     } else {
+                      price = value;
                       return null;
                     }
                   },
@@ -77,6 +98,7 @@ class _SingleProductState extends State<SingleProduct> {
                     if (value.isEmpty) {
                       return "Enter a valid value";
                     } else {
+                      discountPrice = value;
                       return null;
                     }
                   },
@@ -86,11 +108,7 @@ class _SingleProductState extends State<SingleProduct> {
                 ),
                 TextButton(
                   onPressed: () {
-                    if (formKey.currentState.validate()) {
-                      final snackBar =
-                          SnackBar(content: Text('Submitting form'));
-                      _scaffoldKey.currentState.showSnackBar(snackBar);
-                    }
+                    validated();
                   },
                   style: TextButton.styleFrom(backgroundColor: Colors.blue),
                   child: Padding(
@@ -111,5 +129,16 @@ class _SingleProductState extends State<SingleProduct> {
         ),
       ),
     );
+  }
+
+  void _onFormSubmit() {
+    Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
+    productBox.add(Product(
+      name: name,
+      price: price,
+      discountPrice: discountPrice,
+    ));
+    Navigator.of(context).pop();
+    print(productBox);
   }
 }
