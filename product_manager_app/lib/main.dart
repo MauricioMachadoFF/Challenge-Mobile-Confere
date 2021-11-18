@@ -7,13 +7,15 @@ import 'package:product_manager_app/presentation/pages/home.dart';
 import 'package:product_manager_app/presentation/pages/single_product.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:product_manager_app/boxes.dart';
+import 'package:product_manager_app/services/product_api.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(ProductAdapter());
-  await Hive.openBox<Product>(HiveBoxes.productList);
-
+  var box = await Hive.openBox<Product>(HiveBoxes.productList);
+  if (box.length == 0) {
+    box.addAll(await ProductsApi.getProductsDefault());
+  }
   runApp(const MyApp());
 }
 
@@ -23,16 +25,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CounterCubit(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: true,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.deepPurple,
-        ),
-        home: Home(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
       ),
+      home: Home(),
     );
   }
 }

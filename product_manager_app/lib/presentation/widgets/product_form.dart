@@ -105,7 +105,10 @@ class _ProductFormState extends State<ProductForm> {
                 labelText: "Discounted Price",
                 border: OutlineInputBorder(),
               ),
-              keyboardType: TextInputType.numberWithOptions(),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+              ],
               validator: (value) {
                 if (value.isEmpty) {
                   return "Enter a valid value";
@@ -124,7 +127,7 @@ class _ProductFormState extends State<ProductForm> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Salvar',
+                  'Save',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 15.0,

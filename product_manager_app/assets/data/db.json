@@ -170,7 +170,7 @@
     "actual_price": "R$ 119,90",
     "discount_percentage": "12%",
     "installments": "3x R$ 39,97",
-    "image": "",
+    "image": null,
     "sizes": [
       {
         "available": true,
