@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_manager_app/boxes.dart';
-import 'package:product_manager_app/cubit/counter_cubit.dart';
 import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/presentation/pages/home.dart';
 import 'package:product_manager_app/presentation/pages/single_product.dart';

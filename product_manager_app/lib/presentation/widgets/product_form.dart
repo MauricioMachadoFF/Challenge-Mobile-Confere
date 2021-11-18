@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
+import 'package:product_manager_app/bloc/product_form/product_form_bloc.dart';
+import 'package:product_manager_app/bloc/product_form/product_form_bloc.dart';
 import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/boxes.dart';
 
 class ProductForm extends StatefulWidget {
-  final Product product;
-  const ProductForm({Key key, this.product}) : super(key: key);
+  final String name;
+  final String price;
+  final String discountPrice;
+  final Function onSave;
+  const ProductForm({
+    Key key,
+    this.name,
+    this.price,
+    this.discountPrice,
+    this.onSave,
+  }) : super(key: key);
 
   @override
   _ProductFormState createState() => _ProductFormState();
@@ -21,10 +32,10 @@ class _ProductFormState extends State<ProductForm> {
 
   @override
   void initState() {
-    nameController = TextEditingController(text: widget.product?.name);
-    priceController = TextEditingController(text: widget.product?.price);
-    discountPriceController =
-        TextEditingController(text: widget.product?.discountPrice);
+    print('init state form');
+    nameController = TextEditingController(text: widget.name);
+    priceController = TextEditingController(text: widget.price);
+    discountPriceController = TextEditingController(text: widget.discountPrice);
     super.initState();
   }
 
@@ -38,25 +49,30 @@ class _ProductFormState extends State<ProductForm> {
   }
 
   void _onFormSubmit() {
-    if (widget.product != null) {
-      widget.product.name = nameController.text;
-      widget.product.price = priceController.text;
-      widget.product.discountPrice = discountPriceController.text;
+    widget.onSave({
+      "name": nameController.text,
+      "price": priceController.text,
+      "discountPrice": discountPriceController.text,
+    });
+    // if (widget.product != null) {
+    //   widget.product.name = nameController.text;
+    //   widget.product.price = priceController.text;
+    //   widget.product.discountPrice = discountPriceController.text;
 
-      widget.product.save();
-    } else {
-      Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
-      productBox.add(Product(
-        name: nameController.text,
-        price: priceController.text,
-        discountPrice: discountPriceController.text,
-      ));
-    }
-    Navigator.of(context).pop();
+    //   widget.product.save();
+    // } else {
+    //   Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
+    //   productBox.add(Product(
+    //     name: nameController.text,
+    //     price: priceController.text,
+    //     discountPrice: discountPriceController.text,
+    //   ));
+    // }
   }
 
   @override
   Widget build(BuildContext context) {
+    print('build from');
     return Form(
       key: formKey,
       child: Padding(

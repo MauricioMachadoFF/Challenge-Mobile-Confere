@@ -28,11 +28,6 @@ class Product extends HiveObject {
         discountPrice: json["actual_price"].toString().substring(3),
         image: json["image"],
       );
-
-  @override
-  String toString() {
-    return '$name com preço $price com image $image';
-  }
 }
 
 List<Product> productFromJson(String str) =>
