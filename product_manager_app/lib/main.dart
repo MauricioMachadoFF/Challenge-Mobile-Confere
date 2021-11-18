@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:product_manager_app/boxes.dart';
 import 'package:product_manager_app/cubit/counter_cubit.dart';
+import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/presentation/pages/home.dart';
 import 'package:product_manager_app/presentation/pages/single_product.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:product_manager_app/services/product_api.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(ProductAdapter());
+  var box = await Hive.openBox<Product>(HiveBoxes.productList);
+  if (box.length == 0) {
+    box.addAll(await ProductsApi.getProductsDefault());
+  }
   runApp(const MyApp());
 }
 
@@ -14,40 +25,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CounterCubit(),
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
       ),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, @required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Home(),
-      ),
+      home: Home(),
     );
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:product_manager_app/boxes.dart';
 import 'package:product_manager_app/data/models/product.dart';
-import 'package:product_manager_app/services/product_api.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:product_manager_app/presentation/pages/single_product.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:product_manager_app/presentation/widgets/product_list.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -11,62 +14,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // List<Product> list = List<Product>.empty(growable: true);
-  // SharedPreferences sharedPreferences;
-
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
+  }
   // @override
   // void initState() {
-  //   initSharedPreferences();
+  //   Future<List> products = ProductsApi.getProductsDefault(context);
   //   super.initState();
   // }
-  @override
-  void initState() {
-    Future<List> products = ProductsApi.getProductsDefault(context);
-    super.initState();
-  }
-
-  // initSharedPreferences() async{
-  //   if (sharedPreferences == null) {
-
-  //   } else {
-  //     sharedPreferences = await SharedPreferences.getInstance();
-  //   }
-  // }
-  Widget buildProducts(List<Product> products) => ListView.builder(
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-
-          return ListTile(
-            title: Text(product.name),
-          );
-        },
-      );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<List<Product>>(
-        future: ProductsApi.getProductsDefault(context),
-        builder: (context, snapshot) {
-          final products = snapshot.data;
-          print(snapshot.data);
-
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            default:
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('some error'),
-                );
-              } else {
-                return buildProducts(products);
-              }
-          }
+      appBar: AppBar(
+        title: Text('Product Manager'),
+      ),
+      body: ProductList(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SingleProduct(),
+            ),
+          );
         },
+        child: Icon(Icons.add),
+        tooltip: 'Add product',
       ),
     );
   }
