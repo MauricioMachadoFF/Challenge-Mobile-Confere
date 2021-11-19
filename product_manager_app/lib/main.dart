@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:product_manager_app/boxes.dart';
 import 'package:product_manager_app/data/models/product.dart';
 import 'package:product_manager_app/presentation/pages/home.dart';
-import 'package:product_manager_app/presentation/pages/single_product.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:product_manager_app/services/product_api.dart';

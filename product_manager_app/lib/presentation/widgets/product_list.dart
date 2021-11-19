@@ -82,26 +82,107 @@ class _ProductListState extends State<ProductList> {
                       ),
                     ],
                   ),
-                  trailing: Ink(
-                    width: 40,
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      color: Colors.orange,
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EditProductScreen(id: res.key),
+                  trailing: Container(
+                    width: 90.0,
+                    child: Row(
+                      children: [
+                        Ink(
+                          width: 40,
+                          decoration: ShapeDecoration(
+                            shape: CircleBorder(),
+                            color: Colors.orange,
                           ),
-                        );
-                      },
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditProductScreen(id: res.key),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
+                        Ink(
+                          width: 40,
+                          decoration: ShapeDecoration(
+                            shape: CircleBorder(),
+                            color: Colors.red,
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                barrierDismissible: true,
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title:
+                                      const Text('You really want to delete:'),
+                                  content: Text(
+                                    res.name,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  actions: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(
+                                              context,
+                                              rootNavigator: true,
+                                            ).pop();
+                                          },
+                                          child: Text(
+                                            'No',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.orange[600],
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            productListBloc.add(
+                                              ProductListDeleteItem(
+                                                  id: res.key),
+                                            );
+                                            Navigator.of(
+                                              context,
+                                              rootNavigator: true,
+                                            ).pop();
+                                          },
+                                          child: Text(
+                                            'Yes',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Colors.deepPurple,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
