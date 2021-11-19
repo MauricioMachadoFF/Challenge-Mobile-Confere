@@ -42,6 +42,8 @@ class _ProductListState extends State<ProductList> {
         return ListView.builder(
           itemCount: state.productsList.length,
           itemBuilder: (context, index) {
+            state.productsList.sort((item1, item2) =>
+                item1.name.toLowerCase().compareTo(item2.name.toLowerCase()));
             Product res = state.productsList[index];
 
             return Dismissible(
@@ -50,7 +52,7 @@ class _ProductListState extends State<ProductList> {
               ),
               key: UniqueKey(),
               onDismissed: (direction) {
-                res.delete();
+                productListBloc.add(ProductListDeleteItem(id: res.key));
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),

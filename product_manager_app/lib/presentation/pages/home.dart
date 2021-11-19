@@ -19,11 +19,6 @@ class _HomeState extends State<Home> {
     Hive.close();
     super.dispose();
   }
-  // @override
-  // void initState() {
-  //   Future<List> products = ProductsApi.getProductsDefault(context);
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -54,20 +54,6 @@ class _ProductFormState extends State<ProductForm> {
       "price": priceController.text,
       "discountPrice": discountPriceController.text,
     });
-    // if (widget.product != null) {
-    //   widget.product.name = nameController.text;
-    //   widget.product.price = priceController.text;
-    //   widget.product.discountPrice = discountPriceController.text;
-
-    //   widget.product.save();
-    // } else {
-    //   Box<Product> productBox = Hive.box<Product>(HiveBoxes.productList);
-    //   productBox.add(Product(
-    //     name: nameController.text,
-    //     price: priceController.text,
-    //     discountPrice: discountPriceController.text,
-    //   ));
-    // }
   }
 
   @override

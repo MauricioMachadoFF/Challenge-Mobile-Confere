@@ -21,5 +21,8 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     if (event is ProductListLoad) {
       yield state.copyWith(productsList: productBox.values.toList());
     }
+    if (event is ProductListDeleteItem) {
+      productBox.get(event.id).delete();
+    }
   }
 }

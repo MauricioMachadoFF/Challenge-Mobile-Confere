@@ -8,3 +8,10 @@ class ProductListEvent extends Equatable {
 }
 
 class ProductListLoad extends ProductListEvent {}
+
+class ProductListDeleteItem extends ProductListEvent {
+  final int id;
+  ProductListDeleteItem({
+    this.id,
+  });
+}
