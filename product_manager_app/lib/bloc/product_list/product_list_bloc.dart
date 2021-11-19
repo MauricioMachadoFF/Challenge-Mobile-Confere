@@ -24,5 +24,13 @@ class ProductListBloc extends Bloc<ProductListEvent, ProductListState> {
     if (event is ProductListDeleteItem) {
       productBox.get(event.id).delete();
     }
+    if (event is ProductListFilter) {
+      yield state.copyWith(
+          productsList: productBox.values
+              .where((product) => product.name
+                  .toLowerCase()
+                  .contains(event.query.toLowerCase()))
+              .toList());
+    }
   }
 }

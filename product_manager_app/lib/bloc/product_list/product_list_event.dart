@@ -15,3 +15,10 @@ class ProductListDeleteItem extends ProductListEvent {
     this.id,
   });
 }
+
+class ProductListFilter extends ProductListEvent {
+  final String query;
+  ProductListFilter({
+    this.query,
+  });
+}
