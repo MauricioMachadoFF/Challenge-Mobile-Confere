@@ -12,6 +12,8 @@
 #FVM related
 .fvm/flutter_sdk
 
+../.DS_Store
+
 # IntelliJ related
 *.iml
 *.ipr
